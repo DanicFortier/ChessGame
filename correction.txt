@@ -1,13 +1,13 @@
 
-Nom coéquipier 1 :
-Nom coéquipier 2 :
+Nom coéquipier 1 : Isabelle Hinse
+Nom coéquipier 2 : Danic Fortier
 
-Numéro de dossier (matricule) coéquipier 1 :
-Numéro de dossier (matricule) coéquipier 2 :
+Numéro de dossier (matricule) coéquipier 1 : 111 257 176
+Numéro de dossier (matricule) coéquipier 2 : 111 131 323
 
 Temps de réalisation total (estimé) : X heures
 
-Souhaitez-vous participer au prix Pierre Ardouin ? (OUI/NON) : 
+Souhaitez-vous participer au prix Pierre Ardouin ? (OUI/NON) : NON
 
 Correction
 ==========
