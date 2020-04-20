@@ -145,9 +145,22 @@ class Fenetre(Tk):
             # On change la valeur de l'attribut position_selectionnee.
             self.position_selectionnee = position
 
+            # Ce qui met en rouge c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
+            self.canvas_echiquier.itemconfig(tagOrId='case', fill='red')
+
+
             self.messages['foreground'] = 'black'
             self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
+            self.deplacer(position)
+
 
         except KeyError:
             self.messages['foreground'] = 'red'
             self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
+
+        #except
+
+    def deplacer(self, position):
+        # va devoir lancer une exception qui va être attrapé par le except dans la méthode selectionner
+        pass
+
