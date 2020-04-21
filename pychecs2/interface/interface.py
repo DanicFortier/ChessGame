@@ -39,6 +39,8 @@ class CanvasEchiquier(Canvas):
             'a8': 'TN', 'b8': 'CN', 'c8': 'FN', 'd8': 'DN', 'e8': 'RN', 'f8': 'FN', 'g8': 'CN', 'h8': 'TN',
         }
 
+        self.correspondance_case_rectangle = {}
+
         # On fait en sorte que le redimensionnement du canvas redimensionne son contenu. Cet événement étant également
         # généré lors de la création de la fenêtre, nous n'avons pas à dessiner les cases et les pièces dans le
         # constructeur.
@@ -48,6 +50,8 @@ class CanvasEchiquier(Canvas):
         """Méthode qui dessine les cases de l'échiquier.
 
         """
+
+
         for i in range(self.n_lignes):
             for j in range(self.n_colonnes):
                 debut_ligne = i * self.n_pixels_par_case
@@ -63,7 +67,12 @@ class CanvasEchiquier(Canvas):
 
                 # On dessine le rectangle. On utilise l'attribut "tags" pour être en mesure de récupérer les éléments
                 # par la suite.
-                self.create_rectangle(debut_colonne, debut_ligne, fin_colonne, fin_ligne, fill=couleur, tags='case')
+
+                #Le clé permet d'identifier la case. La clé est simplement la postion: String
+                key = self.lettres_colonnes[j] + self.chiffres_rangees[7 - i]
+
+                self.correspondance_case_rectangle[key] = self.create_rectangle(debut_colonne, debut_ligne, fin_colonne, fin_ligne, fill=couleur, tags='case')
+
 
     def dessiner_pieces(self):
         # Caractères unicode représentant les pièces. Vous avez besoin de la police d'écriture DejaVu.
@@ -146,8 +155,9 @@ class Fenetre(Tk):
             # On change la valeur de l'attribut position_selectionnee.
             self.position_selectionnee = position
 
-            # Ce qui met en rouge c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
-            self.canvas_echiquier.itemconfig('current', fill='red')
+            # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
+            case = self.canvas_echiquier.correspondance_case_rectangle[position]
+            self.canvas_echiquier.itemconfig(case, fill='yellow')
 
 
             self.messages['foreground'] = 'black'
