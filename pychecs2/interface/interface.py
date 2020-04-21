@@ -140,13 +140,14 @@ class Fenetre(Tk):
 
         # On récupère l'information sur la pièce à l'endroit choisi. Notez le try...except!
         try:
+
             piece = self.canvas_echiquier.pieces[position]
 
             # On change la valeur de l'attribut position_selectionnee.
             self.position_selectionnee = position
 
             # Ce qui met en rouge c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
-            self.canvas_echiquier.itemconfig(tagOrId='case', fill='red')
+            self.canvas_echiquier.itemconfig('current', fill='red')
 
 
             self.messages['foreground'] = 'black'
