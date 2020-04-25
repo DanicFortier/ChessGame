@@ -156,19 +156,21 @@ class Fenetre(Tk):
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
 
-
         try:
             if not self.canvas_echiquier.position_selectionnee:
-                #Premier clic: position_source
-                self.canvas_echiquier.position_selectionnee = position
+               #Premier clic: position_source
+               self.canvas_echiquier.position_selectionnee = position
             else:
-                #Deuxième clic: position_cible
-                self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
-                self.canvas_echiquier.position_selectionnee = None
+               #Deuxième clic: position_cible
+               self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
+               self.canvas_echiquier.position_selectionnee = None
 
-            if  self.partie.partie_terminee():
-                self.messages['foreground'] = 'black'
-                self.messages['text'] = 'Partie terminée' + self.partie.determiner_gagnant()
+            if self.partie.partie_terminee():
+               self.messages['foreground'] = 'black'
+               self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
+            else:
+               self.messages['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
+
 
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
@@ -177,29 +179,12 @@ class Fenetre(Tk):
         finally:
             self.canvas_echiquier.rafraichir()
 
-        # # On récupère l'information sur la pièce à l'endroit choisi. Notez le try...except!
-        # try:
-        #
-        #     piece = self.canvas_echiquier.pieces[position]
-        #
-        #     # On change la valeur de l'attribut position_selectionnee.
-        #     self.position_selectionnee = position
-        #
         # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
         case = self.canvas_echiquier.correspondance_case_rectangle[position]
         self.canvas_echiquier.itemconfig(case, fill='yellow')
-        #
-        #
-        #     self.messages['foreground'] = 'black'
-        #     self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
-        #     self.deplacer(position)
-        #
-        #
-        # except KeyError:
-        #     self.messages['foreground'] = 'red'
-        #     self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
 
-        #except
+        # Pour indiquer c'est au tour de quel joueur à jouer
+        #self.messages['text'] = ("C'est le tour du joueur " + self.joueur_actif + '.')
 
     def deplacer(self, position):
         # va devoir lancer une exception qui va être attrapé par le except dans la méthode selectionner
