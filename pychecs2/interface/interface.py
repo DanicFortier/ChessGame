@@ -158,18 +158,19 @@ class Fenetre(Tk):
 
         try:
             if not self.canvas_echiquier.position_selectionnee:
-               #Premier clic: position_source
-               self.canvas_echiquier.position_selectionnee = position
+                #Premier clic: position_source
+                self.canvas_echiquier.position_selectionnee = position
             else:
-               #Deuxième clic: position_cible
-               self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
-               self.canvas_echiquier.position_selectionnee = None
+                #Deuxième clic: position_cible
+                self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
+                self.canvas_echiquier.position_selectionnee = None
 
             if self.partie.partie_terminee():
-               self.messages['foreground'] = 'black'
-               self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
+                self.messages['foreground'] = 'green'
+                self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
             else:
-               self.messages['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
+                self.messages['foreground'] = 'blue'
+                self.messages['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
 
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
@@ -185,4 +186,3 @@ class Fenetre(Tk):
     def deplacer(self, position):
         # va devoir lancer une exception qui va être attrapé par le except dans la méthode selectionner
         pass
-
