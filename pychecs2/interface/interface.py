@@ -131,6 +131,7 @@ class Fenetre(Tk):
         # Nom de la fenêtre.
         self.title("Échiquier")
 
+        #Initialisation d'un partie
         self.partie = Partie()
 
 
@@ -155,9 +156,12 @@ class Fenetre(Tk):
         colonne = event.x // self.canvas_echiquier.n_pixels_par_case
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
+        # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
+        case = self.canvas_echiquier.correspondance_case_rectangle[position]
+        self.canvas_echiquier.itemconfig(case, fill='yellow')
 
         try:
-            if not self.canvas_echiquier.position_selectionnee:
+            if self.canvas_echiquier.position_selectionnee == None:
                 #Premier clic: position_source
                 self.canvas_echiquier.position_selectionnee = position
             else:
