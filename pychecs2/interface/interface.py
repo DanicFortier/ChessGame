@@ -150,6 +150,14 @@ class Fenetre(Tk):
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
+    def premier_clic_valide(self, position):
+        piece = self.partie.echiquier.recuperer_piece_a_position(position)
+
+        if piece is None:
+            raise AucunePieceAPosition('Aucune pièce à cet endroit!')
+        elif piece.couleur != self.partie.joueur_actif:
+            raise MauvaiseCouleurPiece("La pièce source n'appartient pas au joueur actif!")
+
     def selectionner(self, event):
         # On trouve le numéro de ligne/colonne en divisant les positions en y/x par le nombre de pixels par case.
         ligne = event.y // self.canvas_echiquier.n_pixels_par_case
@@ -162,6 +170,8 @@ class Fenetre(Tk):
 
         try:
             if self.canvas_echiquier.position_selectionnee == None:
+
+                self.premier_clic_valide(position)
                 #Premier clic: position_source
                 self.canvas_echiquier.position_selectionnee = position
             else:
@@ -181,12 +191,8 @@ class Fenetre(Tk):
             self.messages['text'] = e
             self.canvas_echiquier.position_selectionnee = None
         finally:
-            self.canvas_echiquier.rafraichir()
+            if self.canvas_echiquier.position_selectionnee == None:
+                self.canvas_echiquier.rafraichir()
 
-        # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
-        case = self.canvas_echiquier.correspondance_case_rectangle[position]
-        self.canvas_echiquier.itemconfig(case, fill='yellow')
 
-    def deplacer(self, position):
-        # va devoir lancer une exception qui va être attrapé par le except dans la méthode selectionner
-        pass
+
