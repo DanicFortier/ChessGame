@@ -7,7 +7,7 @@ from tkinter import NSEW, Canvas, Label, Tk
 # Exemple d'importation de la classe Partie.
 from pychecs2.echecs.partie import (AucunePieceAPosition, MauvaiseCouleurPiece, Partie)
 
-from pychecs2.echecs.echiquier import  ErreurDeplacement
+from pychecs2.echecs.echiquier import ErreurDeplacement
 
 class CanvasEchiquier(Canvas):
     """Classe héritant d'un Canvas, et affichant un échiquier qui se redimensionne automatique lorsque
@@ -56,7 +56,6 @@ class CanvasEchiquier(Canvas):
         """Méthode qui dessine les cases de l'échiquier.
 
         """
-
 
         for i in range(self.n_lignes):
             for j in range(self.n_colonnes):
