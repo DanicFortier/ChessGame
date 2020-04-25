@@ -147,6 +147,10 @@ class Fenetre(Tk):
         self.messages = Label(self)
         self.messages.grid()
 
+        # Ajout d'une étiquette qui indique le joueur actif.
+        self.messages_joueur_actif = Label(self)
+        self.messages_joueur_actif.grid()
+
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
@@ -172,9 +176,14 @@ class Fenetre(Tk):
             if self.canvas_echiquier.position_selectionnee == None:
 
                 self.premier_clic_valide(position)
+
                 #Premier clic: position_source
                 self.canvas_echiquier.position_selectionnee = position
+
+                # Puisque la pièce source est valide
+                self.messages['text'] = ""
             else:
+
                 #Deuxième clic: position_cible
                 self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
                 self.canvas_echiquier.position_selectionnee = None
@@ -183,8 +192,8 @@ class Fenetre(Tk):
                 self.messages['foreground'] = 'green'
                 self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
             else:
-                self.messages['foreground'] = 'blue'
-                self.messages['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
+                self.messages_joueur_actif['foreground'] = 'blue'
+                self.messages_joueur_actif['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
 
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
