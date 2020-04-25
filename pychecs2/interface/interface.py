@@ -5,15 +5,16 @@ un échiquier dans un Canvas, puis de déterminer quelle case a été sélection
 from tkinter import NSEW, Canvas, Label, Tk
 
 # Exemple d'importation de la classe Partie.
-from pychecs2.echecs.partie import Partie
+from pychecs2.echecs.partie import (AucunePieceAPosition, MauvaiseCouleurPiece, Partie)
 
+from pychecs2.echecs.echiquier import  ErreurDeplacement
 
 class CanvasEchiquier(Canvas):
     """Classe héritant d'un Canvas, et affichant un échiquier qui se redimensionne automatique lorsque
     la fenêtre est étirée.
 
     """
-    def __init__(self, parent, n_pixels_par_case):
+    def __init__(self, parent, n_pixels_par_case, partie):
         # Nombre de lignes et de colonnes.
         self.n_lignes = 8
         self.n_colonnes = 8
@@ -21,6 +22,11 @@ class CanvasEchiquier(Canvas):
         # Noms des lignes et des colonnes.
         self.chiffres_rangees = ['1', '2', '3', '4', '5', '6', '7', '8']
         self.lettres_colonnes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+        # La position sélectionnée.
+        self.position_selectionnee = None
+
+        self.partie = partie
 
         # Nombre de pixels par case, variable.
         self.n_pixels_par_case = n_pixels_par_case
@@ -91,12 +97,12 @@ class CanvasEchiquier(Canvas):
                              }
 
         # Pour tout paire position, pièce:
-        for position, piece in self.pieces.items():
+        for position, piece in self.partie.echiquier.dictionnaire_pieces.items():
             # On dessine la pièce dans le canvas, au centre de la case. On utilise l'attribut "tags" pour être en
             # mesure de récupérer les éléments dans le canvas.
             coordonnee_y = (self.n_lignes - self.chiffres_rangees.index(position[1]) - 1) * self.n_pixels_par_case + self.n_pixels_par_case // 2
             coordonnee_x = self.lettres_colonnes.index(position[0]) * self.n_pixels_par_case + self.n_pixels_par_case // 2
-            self.create_text(coordonnee_x, coordonnee_y, text=caracteres_pieces[piece],
+            self.create_text(coordonnee_x, coordonnee_y, text=piece,
                              font=('Deja Vu', self.n_pixels_par_case//2), tags='piece')
 
     def redimensionner(self, event):
@@ -107,7 +113,10 @@ class CanvasEchiquier(Canvas):
         # Calcul de la nouvelle dimension des cases.
         self.n_pixels_par_case = nouvelle_taille // self.n_lignes
 
-        # On supprime les anciennes cases et on ajoute les nouvelles.
+        self.rafraichir()
+
+    def rafraichir(self):
+       # On supprime les anciennes cases et on ajoute les nouvelles.
         self.delete('case')
         self.dessiner_cases()
 
@@ -123,15 +132,15 @@ class Fenetre(Tk):
         # Nom de la fenêtre.
         self.title("Échiquier")
 
-        # La position sélectionnée.
-        self.position_selectionnee = None
+        self.partie = Partie()
+
 
         # Truc pour le redimensionnement automatique des éléments de la fenêtre.
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
         # Création du canvas échiquier.
-        self.canvas_echiquier = CanvasEchiquier(self, 60)
+        self.canvas_echiquier = CanvasEchiquier(self, 60, self.partie)
         self.canvas_echiquier.grid(sticky=NSEW)
 
         # Ajout d'une étiquette d'information.
@@ -147,27 +156,49 @@ class Fenetre(Tk):
         colonne = event.x // self.canvas_echiquier.n_pixels_par_case
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
-        # On récupère l'information sur la pièce à l'endroit choisi. Notez le try...except!
+
+
         try:
+            if not self.canvas_echiquier.position_selectionnee:
+                #Premier clic: position_source
+                self.canvas_echiquier.position_selectionnee = position
+            else:
+                #Deuxième clic: position_cible
+                self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
+                self.canvas_echiquier.position_selectionnee = None
 
-            piece = self.canvas_echiquier.pieces[position]
+            if  self.partie.partie_terminee():
+                self.messages['foreground'] = 'black'
+                self.messages['text'] = 'Partie terminée' + self.partie.determiner_gagnant()
 
-            # On change la valeur de l'attribut position_selectionnee.
-            self.position_selectionnee = position
-
-            # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
-            case = self.canvas_echiquier.correspondance_case_rectangle[position]
-            self.canvas_echiquier.itemconfig(case, fill='yellow')
-
-
-            self.messages['foreground'] = 'black'
-            self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
-            self.deplacer(position)
-
-
-        except KeyError:
+        except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
-            self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
+            self.messages['text'] = e
+            self.canvas_echiquier.position_selectionnee = None
+        finally:
+            self.canvas_echiquier.rafraichir()
+
+        # # On récupère l'information sur la pièce à l'endroit choisi. Notez le try...except!
+        # try:
+        #
+        #     piece = self.canvas_echiquier.pieces[position]
+        #
+        #     # On change la valeur de l'attribut position_selectionnee.
+        #     self.position_selectionnee = position
+        #
+        # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
+        case = self.canvas_echiquier.correspondance_case_rectangle[position]
+        self.canvas_echiquier.itemconfig(case, fill='yellow')
+        #
+        #
+        #     self.messages['foreground'] = 'black'
+        #     self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
+        #     self.deplacer(position)
+        #
+        #
+        # except KeyError:
+        #     self.messages['foreground'] = 'red'
+        #     self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
 
         #except
 

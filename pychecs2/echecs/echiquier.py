@@ -5,6 +5,9 @@
 from pychecs2.echecs.piece import Pion, Tour, Fou, Cavalier, Dame, Roi, UTILISER_UNICODE
 
 
+class ErreurDeplacement(Exception):
+    pass
+
 class Echiquier:
     """Classe Echiquier, implémentée avec un dictionnaire de pièces.
 
@@ -91,7 +94,7 @@ class Echiquier:
             rangee_fin (str): Le caractère représentant la rangée de fin, par exemple '4'.
 
         Exemple:
-            >>> echiquer.rangees_entre('1', '1')
+            >>> echiquier.rangees_entre('1', '1')
             []
             >>> echiquier.rangees_entre('2', '3')
             []
@@ -268,11 +271,11 @@ class Echiquier:
 
         """
         if not self.deplacement_est_valide(position_source, position_cible):
-            return False
+            raise ErreurDeplacement("Le déplacement n'est pas valide")
 
         self.dictionnaire_pieces[position_cible] = self.dictionnaire_pieces[position_source]
         del self.dictionnaire_pieces[position_source]
-        return True
+
 
     def roi_de_couleur_est_dans_echiquier(self, couleur):
         """Vérifie si un roi de la couleur reçue en argument est présent dans l'échiquier.
