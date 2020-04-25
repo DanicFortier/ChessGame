@@ -171,7 +171,6 @@ class Fenetre(Tk):
             else:
                self.messages['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
 
-
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
             self.messages['text'] = e
@@ -182,9 +181,6 @@ class Fenetre(Tk):
         # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
         case = self.canvas_echiquier.correspondance_case_rectangle[position]
         self.canvas_echiquier.itemconfig(case, fill='yellow')
-
-        # Pour indiquer c'est au tour de quel joueur à jouer
-        #self.messages['text'] = ("C'est le tour du joueur " + self.joueur_actif + '.')
 
     def deplacer(self, position):
         # va devoir lancer une exception qui va être attrapé par le except dans la méthode selectionner
