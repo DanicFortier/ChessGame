@@ -149,6 +149,7 @@ class Fenetre(Tk):
 
         # Ajout d'une étiquette qui indique le joueur actif.
         self.messages_joueur_actif = Label(self)
+        self.messages_joueur_actif['text'] = ("C'est au joueur blanc de commencer! ")
         self.messages_joueur_actif.grid()
 
         # On lie un clic sur le CanvasEchiquier à une méthode.
@@ -160,7 +161,7 @@ class Fenetre(Tk):
         if piece is None:
             raise AucunePieceAPosition('Aucune pièce à cet endroit!')
         elif piece.couleur != self.partie.joueur_actif:
-            raise MauvaiseCouleurPiece("La pièce source n'appartient pas au joueur actif!")
+            raise MauvaiseCouleurPiece("La pièce n'appartient pas au joueur " + self.partie.joueur_actif + '!')
 
     def selectionner(self, event):
         # On trouve le numéro de ligne/colonne en divisant les positions en y/x par le nombre de pixels par case.
@@ -180,13 +181,24 @@ class Fenetre(Tk):
                 #Premier clic: position_source
                 self.canvas_echiquier.position_selectionnee = position
 
-                # Puisque la pièce source est valide
+                # Puisque la pièce source est valide, on retire le message d'erreur actif
                 self.messages['text'] = ""
             else:
+                # Condition qui permet de changer d'idée en cliquant sur une autre des pièces du joueur actif
+                if self.partie.echiquier.couleur_piece_a_position(position) == self.partie.joueur_actif:
 
-                #Deuxième clic: position_cible
-                self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
-                self.canvas_echiquier.position_selectionnee = None
+                    self.canvas_echiquier.rafraichir()
+                    self.canvas_echiquier.position_selectionnee = position
+
+                    case = self.canvas_echiquier.correspondance_case_rectangle[position]
+                    self.canvas_echiquier.itemconfig(case, fill='yellow')
+
+                else:
+                    # Deuxième clic: position_cible
+                    self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
+                    self.canvas_echiquier.position_selectionnee = None
+
+
 
             if self.partie.partie_terminee():
                 self.messages['foreground'] = 'green'
