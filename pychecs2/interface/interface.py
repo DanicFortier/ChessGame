@@ -2,7 +2,7 @@
 un échiquier dans un Canvas, puis de déterminer quelle case a été sélectionnée.
 
 """
-from tkinter import NSEW, Canvas, Label, Tk
+from tkinter import NSEW, Canvas, Label, Tk, Button
 
 # Exemple d'importation de la classe Partie.
 from pychecs2.echecs.partie import (AucunePieceAPosition, MauvaiseCouleurPiece, Partie)
@@ -131,7 +131,7 @@ class Fenetre(Tk):
         # Nom de la fenêtre.
         self.title("Échiquier")
 
-        #Initialisation d'un partie
+        #Initialisation d'une partie
         self.partie = Partie()
 
 
@@ -150,10 +150,22 @@ class Fenetre(Tk):
         # Ajout d'une étiquette qui indique le joueur actif.
         self.messages_joueur_actif = Label(self)
         self.messages_joueur_actif['text'] = ("C'est au joueur blanc de commencer! ")
+        self.messages_joueur_actif['foreground'] = 'blue'
         self.messages_joueur_actif.grid()
 
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
+
+        #Ajout des boutons pour sauvegarder et charger une partie.
+        self.CanvasEchiquier = Tk()
+        bouton_sauvegarder = Button(self.CanvasEchiquier, text="Sauvegarder la partie")#, command=self.partie.sauvegarder_partie())
+        bouton_charger = Button(self.CanvasEchiquier, text="Charger la partie")# command=self.partie.charger_partie())
+        bouton_sauvegarder.grid()
+        bouton_charger.grid()
+
+        #Ajout d'un bouton pour commencer une nouvelle partie.
+        bouton_nouvelle_partie = Button(self.CanvasEchiquier, text="Nouvelle partie")#, command=self.partie.nouvelle_partie())
+        bouton_nouvelle_partie.grid()
 
     def premier_clic_valide(self, position):
         piece = self.partie.echiquier.recuperer_piece_a_position(position)

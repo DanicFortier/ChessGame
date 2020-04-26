@@ -5,6 +5,8 @@ dont un objet échiquier (une instance de la classe Echiquier).
 """
 from pychecs2.echecs.echiquier import Echiquier
 
+import pickle
+
 class AucunePieceAPosition(Exception):
     pass
 
@@ -118,3 +120,13 @@ class Partie:
 
         print(self.echiquier)
         print("\nPartie terminée! Le joueur {} a gagné".format(self.determiner_gagnant()))
+
+    def nouvelle_partie(self, recommencer):
+        pass
+
+    def sauvegarder_partie(self, sauvegarde):
+        with open(sauvegarde, 'wb') as s:
+            pickle.dump(self, partie, s)
+
+    def charger_partie(self):
+        pickle.load(open("sauvegarde", "rb"))
