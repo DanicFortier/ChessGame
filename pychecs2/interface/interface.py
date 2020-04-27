@@ -194,7 +194,12 @@ class Fenetre(Tk):
 
 
     def nouvelle_partie(self):
-        pass
+        self.canvas_echiquier.partie = Partie()
+        self.partie = self.canvas_echiquier.partie
+
+        self.canvas_echiquier.rafraichir()
+
+        self.mise_a_jour_message_joueur_actif()
 
 
     def premier_clic_valide(self, position):
