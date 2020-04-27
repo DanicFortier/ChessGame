@@ -3,6 +3,7 @@ un échiquier dans un Canvas, puis de déterminer quelle case a été sélection
 
 """
 from tkinter import NSEW, Canvas, Label, Tk, Button
+import pickle
 
 # Exemple d'importation de la classe Partie.
 from pychecs2.echecs.partie import (AucunePieceAPosition, MauvaiseCouleurPiece, Partie)
@@ -157,15 +158,38 @@ class Fenetre(Tk):
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
         #Ajout des boutons pour sauvegarder et charger une partie.
-        self.CanvasEchiquier = Tk()
-        bouton_sauvegarder = Button(self.CanvasEchiquier, text="Sauvegarder la partie")#, command=self.partie.sauvegarder_partie())
-        bouton_charger = Button(self.CanvasEchiquier, text="Charger la partie")# command=self.partie.charger_partie())
-        bouton_sauvegarder.grid()
-        bouton_charger.grid()
+        bouton_sauvegarder = Button(self, text="Sauvegarder la partie", command=self.sauvegarder_partie)
+        bouton_charger = Button(self, text="Charger la partie", command=self.charger_partie)
+        bouton_sauvegarder.grid(row=0, column=1)
+        bouton_charger.grid(row=1, column=1)
 
         #Ajout d'un bouton pour commencer une nouvelle partie.
-        bouton_nouvelle_partie = Button(self.CanvasEchiquier, text="Nouvelle partie")#, command=self.partie.nouvelle_partie())
-        bouton_nouvelle_partie.grid()
+        bouton_nouvelle_partie = Button(self, text="Nouvelle partie", command=self.nouvelle_partie)
+        bouton_nouvelle_partie.grid(row=2, column=1)
+
+    def mise_a_jour_message_joueur_actif(self):
+        self.messages_joueur_actif['foreground'] = 'blue'
+        self.messages_joueur_actif['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
+
+    def sauvegarder_partie(self):
+        with open('./sauvegarde_partie.bin', 'wb') as f:
+            pickle.dump(self.partie, f)
+
+    def charger_partie(self):
+        with open('./sauvegarde_partie.bin', 'rb') as f:
+
+                self.canvas_echiquier.partie = pickle.load(f)
+
+                #C'est la chose la plus redneck que j'ai fait de toute ma vie
+                self.partie = self.canvas_echiquier.partie
+
+                self.canvas_echiquier.rafraichir()
+
+                self.mise_a_jour_message_joueur_actif()
+
+    def nouvelle_partie(self):
+        pass
+
 
     def premier_clic_valide(self, position):
         piece = self.partie.echiquier.recuperer_piece_a_position(position)
@@ -211,13 +235,12 @@ class Fenetre(Tk):
                     self.canvas_echiquier.position_selectionnee = None
 
 
-
+            # TODO: Empecher les joueurs de continuer à jouer lorsque la partie est fini
             if self.partie.partie_terminee():
                 self.messages['foreground'] = 'green'
                 self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
             else:
-                self.messages_joueur_actif['foreground'] = 'blue'
-                self.messages_joueur_actif['text'] = ("C'est le tour du joueur " + self.partie.joueur_actif + '.')
+                self.mise_a_jour_message_joueur_actif()
 
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
