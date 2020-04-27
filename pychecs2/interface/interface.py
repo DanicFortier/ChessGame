@@ -177,7 +177,7 @@ class Fenetre(Tk):
 
     def charger_partie(self):
         with open('./sauvegarde_partie.bin', 'rb') as f:
-
+            try:
                 self.canvas_echiquier.partie = pickle.load(f)
 
                 #C'est la chose la plus redneck que j'ai fait de toute ma vie
@@ -186,6 +186,12 @@ class Fenetre(Tk):
                 self.canvas_echiquier.rafraichir()
 
                 self.mise_a_jour_message_joueur_actif()
+
+            except EOFError:
+                self.messages['text'] = "Il n'y a pas de partie sauvegarder !"
+
+
+
 
     def nouvelle_partie(self):
         pass
