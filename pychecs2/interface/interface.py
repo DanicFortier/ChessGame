@@ -2,7 +2,7 @@
 un échiquier dans un Canvas, puis de déterminer quelle case a été sélectionnée.
 
 """
-from tkinter import NSEW, Canvas, Label, Tk, Button
+from tkinter import NSEW, Canvas, Label, Tk, Button, Frame
 import pickle
 
 # Exemple d'importation de la classe Partie.
@@ -157,15 +157,19 @@ class Fenetre(Tk):
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
+        # Ajout d'un cadre pour regrouper les boutons
+        frame_boutons = Frame(self)
+        frame_boutons.grid(row=0, column=1)
+
         #Ajout des boutons pour sauvegarder et charger une partie.
-        bouton_sauvegarder = Button(self, text="Sauvegarder la partie", command=self.sauvegarder_partie)
-        bouton_charger = Button(self, text="Charger la partie", command=self.charger_partie)
-        bouton_sauvegarder.grid(row=0, column=1)
-        bouton_charger.grid(row=1, column=1)
+        bouton_sauvegarder = Button(frame_boutons, text="Sauvegarder la partie", command=self.sauvegarder_partie)
+        bouton_charger = Button(frame_boutons, text="Charger la partie", command=self.charger_partie)
+        bouton_sauvegarder.grid()
+        bouton_charger.grid()
 
         #Ajout d'un bouton pour commencer une nouvelle partie.
-        bouton_nouvelle_partie = Button(self, text="Nouvelle partie", command=self.nouvelle_partie)
-        bouton_nouvelle_partie.grid(row=2, column=1)
+        bouton_nouvelle_partie = Button(frame_boutons, text="Nouvelle partie", command=self.nouvelle_partie)
+        bouton_nouvelle_partie.grid()
 
     def mise_a_jour_message_joueur_actif(self):
         self.messages_joueur_actif['foreground'] = 'blue'
