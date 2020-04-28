@@ -2,7 +2,7 @@
 un échiquier dans un Canvas, puis de déterminer quelle case a été sélectionnée.
 
 """
-from tkinter import NSEW, Canvas, Label, Tk, Button, Frame
+from tkinter import NSEW, Canvas, Label, Tk, Button, Frame, messagebox
 import pickle
 
 # Exemple d'importation de la classe Partie.
@@ -129,6 +129,8 @@ class Fenetre(Tk):
     def __init__(self):
         super().__init__()
 
+        self.protocol("WM_DELETE_WINDOW", self.fermeture)
+
         # Nom de la fenêtre.
         self.title("Échiquier")
 
@@ -170,6 +172,13 @@ class Fenetre(Tk):
         #Ajout d'un bouton pour commencer une nouvelle partie.
         bouton_nouvelle_partie = Button(frame_boutons, text="Nouvelle partie", command=self.nouvelle_partie)
         bouton_nouvelle_partie.grid()
+
+    def fermeture(self):
+
+        if messagebox.askyesno("Quit", "Voulez vous sauvegarder la partie avant de quitter?"):
+            self.sauvegarder_partie()
+
+        self.destroy()
 
     def mise_a_jour_message_joueur_actif(self):
         self.messages_joueur_actif['foreground'] = 'blue'
