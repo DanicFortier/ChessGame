@@ -6,9 +6,9 @@ from tkinter import NSEW, Canvas, Label, Tk, Button, Frame, messagebox
 import pickle
 
 # Exemple d'importation de la classe Partie.
-from pychecs2.echecs.partie import (AucunePieceAPosition, MauvaiseCouleurPiece, Partie)
+from pychecs2.echecs.partie import Partie
 
-from pychecs2.echecs.echiquier import ErreurDeplacement
+from  pychecs2.interface.Exceptions import AucunePieceAPosition, MauvaiseCouleurPiece, ErreurDeplacement
 
 class CanvasEchiquier(Canvas):
     """Classe héritant d'un Canvas, et affichant un échiquier qui se redimensionne automatique lorsque
@@ -175,7 +175,7 @@ class Fenetre(Tk):
 
     def fermeture(self):
 
-        if messagebox.askyesno("Quit", "Voulez vous sauvegarder la partie avant de quitter?"):
+        if messagebox.askyesno("Quitter", "Voulez vous sauvegarder la partie avant de quitter?"):
             self.sauvegarder_partie()
 
         self.destroy()
