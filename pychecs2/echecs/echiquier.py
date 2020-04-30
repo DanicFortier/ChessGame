@@ -3,10 +3,8 @@
 
 """
 from pychecs2.echecs.piece import Pion, Tour, Fou, Cavalier, Dame, Roi, UTILISER_UNICODE
+from pychecs2.interface.Exceptions import ErreurDeplacement
 
-
-class ErreurDeplacement(Exception):
-    pass
 
 class Echiquier:
     """Classe Echiquier, implémentée avec un dictionnaire de pièces.
@@ -94,13 +92,13 @@ class Echiquier:
             rangee_fin (str): Le caractère représentant la rangée de fin, par exemple '4'.
 
         Exemple:
-            >>> echiquier.rangees_entre('1', '1')
+            #>>> echiquier.rangees_entre('1', '1')
             []
-            >>> echiquier.rangees_entre('2', '3')
+            #>>> echiquier.rangees_entre('2', '3')
             []
-            >>> echiquier.rangees_entre('2', '8')
+            #>>> echiquier.rangees_entre('2', '8')
             ['3', '4', '5', '6', '7']
-            >>> echiquier.rangees_entre('8', '3')
+            #>>> echiquier.rangees_entre('8', '3')
             ['7', '6', '5', '4']
 
         Indice:
@@ -128,13 +126,13 @@ class Echiquier:
             colonne_fin (str): Le caractère représentant la colonne de fin, par exemple 'h'.
 
         Exemple:
-            >>> echiquer.colonnes_entre('a', 'a')
+            #>>> echiquer.colonnes_entre('a', 'a')
             []
-            >>> echiquier.colonnes_entre('b', 'c')
+            #>>> echiquier.colonnes_entre('b', 'c')
             []
-            >>> echiquier.colonnes_entre('b', 'h')
+           # >>> echiquier.colonnes_entre('b', 'h')
             ['c', 'd', 'e', 'f', 'g']
-            >>> echiquier.colonnes_entre('h', 'c')
+            #>>> echiquier.colonnes_entre('h', 'c')
             ['g', 'f', 'e', 'd']
 
         Indice:
@@ -276,7 +274,6 @@ class Echiquier:
         self.dictionnaire_pieces[position_cible] = self.dictionnaire_pieces[position_source]
         del self.dictionnaire_pieces[position_source]
 
-
     def roi_de_couleur_est_dans_echiquier(self, couleur):
         """Vérifie si un roi de la couleur reçue en argument est présent dans l'échiquier.
 
@@ -354,7 +351,8 @@ class Echiquier:
             else:
                 chaine += '{} | '.format(self.chiffres_rangees[rangee])
             for colonne in range(8):
-                piece = self.dictionnaire_pieces.get('{}{}'.format(self.lettres_colonnes[colonne], self.chiffres_rangees[rangee]))
+                piece = self.dictionnaire_pieces.get('{}{}'.format(self.lettres_colonnes[colonne],
+                                                                   self.chiffres_rangees[rangee]))
                 if piece is not None:
                     if UTILISER_UNICODE:
                         chaine += str(piece) + ' \u2502 '
