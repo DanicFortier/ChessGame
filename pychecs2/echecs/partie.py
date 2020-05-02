@@ -4,7 +4,7 @@ dont un objet échiquier (une instance de la classe Echiquier).
 
 """
 from pychecs2.echecs.echiquier import Echiquier
-from pychecs2.interface.Exceptions import AucunePieceAPosition, MauvaiseCouleurPiece
+from pychecs2.interface.Exceptions import AucunePieceAPosition, MauvaiseCouleurPiece, ProvoqueEchecJoueursActif
 
 
 class Partie:
@@ -83,7 +83,13 @@ class Partie:
         elif piece.couleur != self.joueur_actif:
             raise MauvaiseCouleurPiece("La pièce source n'appartient pas au joueur actif!")
 
+
         self.echiquier.deplacer(position_source, position_cible)
+
+        # TODO:
+        if self.echiquier.echec_sur_le_roi_de_couleur(self.joueur_actif):
+            raise ProvoqueEchecJoueursActif("Ce mouvement provoquerait un échec, mouvement invalide")
+
         self.joueur_suivant()
 
     def joueur_suivant(self):

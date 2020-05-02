@@ -9,7 +9,7 @@ import pickle
 # Exemple d'importation de la classe Partie.
 from pychecs2.echecs.partie import Partie
 
-from  pychecs2.interface.Exceptions import AucunePieceAPosition, MauvaiseCouleurPiece, ErreurDeplacement
+from  pychecs2.interface.Exceptions import AucunePieceAPosition, MauvaiseCouleurPiece, ErreurDeplacement, ProvoqueEchecJoueursActif
 
 class CanvasEchiquier(Canvas):
     """Classe héritant d'un Canvas, et affichant un échiquier qui se redimensionne automatique lorsque
@@ -285,7 +285,8 @@ class Fenetre(Tk):
 
         self.sauvegarder_dernier_mouvement()
 
-
+        # Puisque la pièce source est valide, on retire le message d'erreur actif
+        self.messages['text'] = ""
 
 
         try:
@@ -296,8 +297,7 @@ class Fenetre(Tk):
                 #Premier clic: position_source
                 self.canvas_echiquier.position_selectionnee = position
 
-                # Puisque la pièce source est valide, on retire le message d'erreur actif
-                self.messages['text'] = ""
+
             else:
                 # Condition qui permet de changer d'idée en cliquant sur une autre des pièces du joueur actif
                 if self.partie.echiquier.couleur_piece_a_position(position) == self.partie.joueur_actif:
@@ -315,8 +315,6 @@ class Fenetre(Tk):
 
                     # Detection echec
                     # Note: le joueur actif a changé
-
-
                     if self.partie.echiquier.echec_sur_le_roi_de_couleur(self.partie.joueur_actif):
                         self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec!"
 
@@ -329,12 +327,15 @@ class Fenetre(Tk):
                 self.mise_a_jour_message_joueur_actif()
 
 
-
-
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'
             self.messages['text'] = e
             self.canvas_echiquier.position_selectionnee = None
+
+        except ProvoqueEchecJoueursActif as e:
+            self.messages['text'] = e
+            self.charger_dernier_mouvement()
+
         finally:
             if self.canvas_echiquier.position_selectionnee == None:
                 self.canvas_echiquier.rafraichir()

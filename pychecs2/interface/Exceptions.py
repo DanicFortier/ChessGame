@@ -8,3 +8,7 @@ class MauvaiseCouleurPiece(Exception):
 
 class ErreurDeplacement(Exception):
     pass
+
+
+class ProvoqueEchecJoueursActif(Exception):
+    pass
