@@ -8,9 +8,7 @@ from pychecs2.interface.interface import Fenetre
 
 if __name__ == '__main__':
 
-    # Création et affichage d'une fenêtre (aucun lien avec la partie ci-haut).
+    # Création et affichage d'une fenêtre.
     f = Fenetre()
-
-
 
     f.mainloop()
