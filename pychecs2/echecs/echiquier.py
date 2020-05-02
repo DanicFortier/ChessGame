@@ -3,7 +3,7 @@
 
 """
 from pychecs2.echecs.piece import Pion, Tour, Fou, Cavalier, Dame, Roi, UTILISER_UNICODE
-from pychecs2.interface.Exceptions import ErreurDeplacement
+from pychecs2.interface.Exceptions import ErreurDeplacement, AucunePieceAPosition
 
 
 class Echiquier:
@@ -321,8 +321,43 @@ class Echiquier:
             if piece.couleur != couleur:
                 if self.deplacement_est_valide(position, position_du_roi):
                     return True
-
         return False
+
+    def echec_et_mat_sur_le_roi_de_couleur(self,couleur):
+
+
+        position_du_roi = self.position_roi_de_couleur(couleur)
+        deplacements_valides = self.ObtenirDeplacementValide(position_du_roi)
+
+        for deplacement_valides in deplacements_valides:
+
+            position_serait_echec = False
+
+            for position, piece in self.dictionnaire_pieces.items():
+                if piece.couleur != couleur:
+                    if self.deplacement_est_valide(position, deplacement_valides):
+                        position_serait_echec = True
+            if not position_serait_echec:
+                return False
+
+        # La logique est que si on a pas pu retourner False,
+        # c'est que tous les positions sont couvertes par une pièce ennemi
+        return True
+
+
+    def ObtenirDeplacementValide(self, position_source):
+
+        if self.recuperer_piece_a_position(position_source) is None:
+            raise AucunePieceAPosition("Impossible de vérifier les déplacements, il n'y a pas de pièce.")
+
+        liste_position_deplacement_valide_roi_de_couleur = []
+        for colonne in self.lettres_colonnes:
+            for rangee in self.chiffres_rangees:
+                position_test = colonne + rangee
+                if self.deplacement_est_valide(position_source, position_test):
+                    liste_position_deplacement_valide_roi_de_couleur.append(position_test)
+
+        return liste_position_deplacement_valide_roi_de_couleur
 
 
     def initialiser_echiquier_depart(self):

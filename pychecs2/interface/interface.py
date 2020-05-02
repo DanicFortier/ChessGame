@@ -250,6 +250,7 @@ class Fenetre(Tk):
 
                 self.mise_a_jour_message_joueur_actif()
 
+
             except EOFError:
                 self.messages['text'] = "Il n'y a pas de partie sauvegarder !"
 
@@ -285,12 +286,14 @@ class Fenetre(Tk):
 
         self.sauvegarder_dernier_mouvement()
 
-        # Puisque la pièce source est valide, on retire le message d'erreur actif
-        self.messages['text'] = ""
+
 
 
         try:
             if self.canvas_echiquier.position_selectionnee == None:
+
+                # Puisque la pièce source est valide, on retire le message d'erreur actif
+                self.messages['text'] = ""
 
                 self.premier_clic_valide(position)
 
@@ -318,6 +321,10 @@ class Fenetre(Tk):
                     if self.partie.echiquier.echec_sur_le_roi_de_couleur(self.partie.joueur_actif):
                         self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec!"
 
+                        #TODO: Échec et mat ici.
+                        if self.partie.echiquier.echec_et_mat_sur_le_roi_de_couleur(self.partie.joueur_actif):
+                            self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec et mat!"
+
 
             #TODO: Empêcher les joueurs de continuer à jouer lorsque la partie est fini
             if self.partie.partie_terminee():
@@ -335,6 +342,7 @@ class Fenetre(Tk):
         except ProvoqueEchecJoueursActif as e:
             self.messages['text'] = e
             self.charger_dernier_mouvement()
+
 
         finally:
             if self.canvas_echiquier.position_selectionnee == None:

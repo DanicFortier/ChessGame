@@ -83,12 +83,11 @@ class Partie:
         elif piece.couleur != self.joueur_actif:
             raise MauvaiseCouleurPiece("La pièce source n'appartient pas au joueur actif!")
 
-
         self.echiquier.deplacer(position_source, position_cible)
 
         # TODO:
         if self.echiquier.echec_sur_le_roi_de_couleur(self.joueur_actif):
-            raise ProvoqueEchecJoueursActif("Ce mouvement provoquerait un échec, mouvement invalide")
+            raise ProvoqueEchecJoueursActif("Ce mouvement provoquerait un échec ou n'en bloque pas un, mouvement invalide")
 
         self.joueur_suivant()
 
