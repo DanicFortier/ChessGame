@@ -163,6 +163,10 @@ class Fenetre(Tk):
         frame_boutons = Frame(self)
         frame_boutons.grid(row=0, column=1)
 
+        #Bouton pour annuler le dernier mouvement.
+        bouton_dernier_mouvement = bouton_sauvegarder = Button(frame_boutons, text="Annuler le dernier mouvement", command=self.charger_dernier_mouvement)
+        bouton_dernier_mouvement.grid()
+
         #Ajout des boutons pour sauvegarder et charger une partie.
         bouton_sauvegarder = Button(frame_boutons, text="Sauvegarder la partie", command=self.sauvegarder_partie)
         bouton_charger = Button(frame_boutons, text="Charger la partie", command=self.charger_partie)
@@ -203,7 +207,24 @@ class Fenetre(Tk):
             except EOFError:
                 self.messages['text'] = "Il n'y a pas de partie sauvegarder !"
 
+    def sauvegarder_dernier_mouvement(self):
+        with open('./dernier_mouvement.bin', 'wb') as f:
+            pickle.dump(self.partie, f)
 
+    def charger_dernier_mouvement(self):
+        with open('./dernier_mouvement.bin', 'rb') as f:
+            try:
+                self.canvas_echiquier.partie = pickle.load(f)
+
+                #C'est la chose la plus redneck que j'ai fait de toute ma vie
+                self.partie = self.canvas_echiquier.partie
+
+                self.canvas_echiquier.rafraichir()
+
+                self.mise_a_jour_message_joueur_actif()
+
+            except EOFError:
+                self.messages['text'] = "Il n'y a pas de partie sauvegarder !"
 
 
     def nouvelle_partie(self):
@@ -213,6 +234,7 @@ class Fenetre(Tk):
         self.canvas_echiquier.rafraichir()
 
         self.mise_a_jour_message_joueur_actif()
+        self.messages['text'] = ""
 
 
     def premier_clic_valide(self, position):
@@ -229,9 +251,11 @@ class Fenetre(Tk):
         colonne = event.x // self.canvas_echiquier.n_pixels_par_case
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
-        # Ce qui met en jaune c'est cette ligne-ci, j'aimerais pouvoir juste changer la case sélectionné
+        # Ce qui met en jaune c'est cette ligne-ci
         case = self.canvas_echiquier.correspondance_case_rectangle[position]
         self.canvas_echiquier.itemconfig(case, fill='yellow')
+
+        self.sauvegarder_dernier_mouvement()
 
         try:
             if self.canvas_echiquier.position_selectionnee == None:
