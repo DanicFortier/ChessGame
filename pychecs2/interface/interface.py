@@ -285,6 +285,9 @@ class Fenetre(Tk):
 
         self.sauvegarder_dernier_mouvement()
 
+
+
+
         try:
             if self.canvas_echiquier.position_selectionnee == None:
 
@@ -310,13 +313,23 @@ class Fenetre(Tk):
                     self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
                     self.canvas_echiquier.position_selectionnee = None
 
+                    # Detection echec
+                    # Note: le joueur actif a changé
 
-            #Empêche les joueurs de continuer à jouer lorsque la partie est fini
+
+                    if self.partie.echiquier.echec_sur_le_roi_de_couleur(self.partie.joueur_actif):
+                        self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec!"
+
+
+            #TODO: Empêcher les joueurs de continuer à jouer lorsque la partie est fini
             if self.partie.partie_terminee():
                 self.messages['foreground'] = 'green'
                 self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
             else:
                 self.mise_a_jour_message_joueur_actif()
+
+
+
 
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:
             self.messages['foreground'] = 'red'

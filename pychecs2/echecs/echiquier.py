@@ -291,6 +291,40 @@ class Echiquier:
 
         return False
 
+    """
+        Retourne la poisition du roi de la couleur mentionné
+
+        Args:
+            couleur (str): La couleur (blanc ou noir) du roi à rechercher.
+
+        Returns:
+            string: la position
+    """
+    def position_roi_de_couleur(self, couleur):
+        for position, piece in self.dictionnaire_pieces.items():
+            if isinstance(piece, Roi):
+                if piece.couleur == couleur:
+                    return position
+
+    """
+        Retourne si le roi de couleur est en échec
+
+        Args:
+            couleur (str): La couleur (blanc ou noir) du roi à tester.
+
+        Returns:
+            bool: Vrai si le roi de couleur est en échec, faux sinon
+    """
+    def echec_sur_le_roi_de_couleur(self, couleur):
+        position_du_roi = self.position_roi_de_couleur(couleur)
+        for position, piece in self.dictionnaire_pieces.items():
+            if piece.couleur != couleur:
+                if self.deplacement_est_valide(position, position_du_roi):
+                    return True
+
+        return False
+
+
     def initialiser_echiquier_depart(self):
         """Initialise l'échiquier à son contenu initial. Pour faire vos tests pendant le développement,
         nous vous suggérons de vous fabriquer un échiquier plus simple, en modifiant l'attribut

@@ -8,6 +8,16 @@ from pychecs2.interface.interface import Fenetre
 
 if __name__ == '__main__':
 
+
+    # Création d'une instance de Partie.
+    p = Partie()
+
+    # Affichage de l'échiquier dans cette partie.
+    print(p.echiquier)
+    print(p.echiquier.position_roi_de_couleur('blanc'))
+    print(p.echiquier.echec_sur_le_roi_de_couleur('blanc'))
+
+
     # Création et affichage d'une fenêtre.
     f = Fenetre()
 
