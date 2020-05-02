@@ -3,6 +3,7 @@ un échiquier dans un Canvas, puis de déterminer quelle case a été sélection
 
 """
 from tkinter import NSEW, Canvas, Label, Tk, Button, Frame, messagebox
+#from random import choice
 import pickle
 
 # Exemple d'importation de la classe Partie.
@@ -38,7 +39,7 @@ class CanvasEchiquier(Canvas):
                          height=self.n_colonnes * self.n_pixels_par_case)
 
         # Dictionnaire contenant les pièces. Vous devinerez, si vous réutilisez cette classe dans votre TP4,
-        # qu'il fandra adapter ce code pour plutôt utiliser la classe Echiquier.
+        # qu'il faudra adapter ce code pour plutôt utiliser la classe Echiquier.
         self.pieces = {
             'a1': 'TB', 'b1': 'CB', 'c1': 'FB', 'd1': 'DB', 'e1': 'RB', 'f1': 'FB', 'g1': 'CB', 'h1': 'TB',
             'a2': 'PB', 'b2': 'PB', 'c2': 'PB', 'd2': 'PB', 'e2': 'PB', 'f2': 'PB', 'g2': 'PB', 'h2': 'PB',
@@ -69,7 +70,7 @@ class CanvasEchiquier(Canvas):
                 if (i + j) % 2 == 0:
                     couleur = 'white'
                 else:
-                    couleur = 'gray'
+                    couleur = 'gray'  #couleur = self.ColorPalette.get_random_color
 
                 # On dessine le rectangle. On utilise l'attribut "tags" pour être en mesure de récupérer les éléments
                 # par la suite.
@@ -125,6 +126,28 @@ class CanvasEchiquier(Canvas):
         self.dessiner_pieces()
 
 
+# class ColorPalette:
+#     COLORS = [
+#         "#39add1",  # Light Blue
+#         "#3079ab",  # Dark Blue
+#         "#c25975",  # Mauve
+#         "#e15258",  # Red
+#         "#f9845b",  # Orange
+#         "#838cc7",  # Lavender
+#         "#7d669e",  # Purple
+#         "#53bbb4",  # Aqua
+#         "#51b46d",  # Green
+#         "#e0ab18",  # Mustard
+#         "#637a91",  # Dark Gray
+#         "#f092b0",  # Pink
+#         "#b7c0c7"  # Light Gray
+#     ]
+#
+#     @classmethod
+#     def get_random_color(cls):
+#         return choice(cls.COLORS)
+
+
 class Fenetre(Tk):
     def __init__(self):
         super().__init__()
@@ -176,6 +199,10 @@ class Fenetre(Tk):
         #Ajout d'un bouton pour commencer une nouvelle partie.
         bouton_nouvelle_partie = Button(frame_boutons, text="Nouvelle partie", command=self.nouvelle_partie)
         bouton_nouvelle_partie.grid()
+
+        #Ajout d'un bouton pour changer la couleur des cases grises dans le jeu.
+        #bouton_change_couleur = Button(frame_boutons, text="Couleur thème", command=self.get_random_color)
+        #bouton_change_couleur.grid()
 
     def fermeture(self):
 
@@ -238,6 +265,7 @@ class Fenetre(Tk):
 
 
     def premier_clic_valide(self, position):
+        #Ceci permet au joueur actif de changer de pièce source sans compléter le déplacement.
         piece = self.partie.echiquier.recuperer_piece_a_position(position)
 
         if piece is None:
@@ -283,7 +311,7 @@ class Fenetre(Tk):
                     self.canvas_echiquier.position_selectionnee = None
 
 
-            # TODO: Empecher les joueurs de continuer à jouer lorsque la partie est fini
+            #Empêche les joueurs de continuer à jouer lorsque la partie est fini
             if self.partie.partie_terminee():
                 self.messages['foreground'] = 'green'
                 self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
