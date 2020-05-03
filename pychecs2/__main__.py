@@ -8,16 +8,6 @@ from pychecs2.interface.interface import Fenetre
 
 if __name__ == '__main__':
 
-
-    # Création d'une instance de Partie.
-    p = Partie()
-
-    # Affichage de l'échiquier dans cette partie.
-    print(p.echiquier)
-    #print(p.echiquier.ObtenirDeplacementValide('g1'))
-
-
-
     # Création et affichage d'une fenêtre.
     f = Fenetre()
 
