@@ -224,7 +224,6 @@ class Fenetre(Tk):
             try:
                 self.canvas_echiquier.partie = pickle.load(f)
 
-                #C'est la chose la plus redneck que j'ai fait de toute ma vie
                 self.partie = self.canvas_echiquier.partie
 
                 self.canvas_echiquier.rafraichir()
@@ -328,7 +327,7 @@ class Fenetre(Tk):
                         #    self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec et mat!"
 
 
-            #TODO: Empêcher les joueurs de continuer à jouer lorsque la partie est fini
+
             if self.partie.partie_terminee():
                 self.messages['foreground'] = 'green'
                 self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')

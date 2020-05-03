@@ -85,8 +85,7 @@ class Partie:
 
         self.echiquier.deplacer(position_source, position_cible)
 
-        #TODO: mettre la promotion du pion ici
-
+        #Promotion du pion
         self.echiquier.promotion_pion(position_cible)
 
         if self.echiquier.echec_sur_le_roi_de_couleur(self.joueur_actif):

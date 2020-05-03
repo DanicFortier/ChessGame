@@ -70,8 +70,13 @@ Fonctionnalitées implémentées:
 3. Permettre d’annuler le dernier mouvement
 12. Demander si on veut sauvegarder avant de quitter/charger
 
+
+Pour les fonctionnalités avec une *, vous DEVEZ indiquer ici quel fichier de
+sauvegarde ouvrir et quels déplacements effectuer pour que le correcteur puisse
+évaluer votre fonctionnalité.
+
 Règles avancées implémentées:
-Note: Pour les fichiers de parties sauvegarder, nous étions seulement capable de de charger des fichiers .bin et non .txt
+Note: Pour les fichiers de parties sauvegardés, nous étions seulement capable de charger des fichiers .bin et non .txt
 
 15. Règles avancées : détection des mises en échec :
     bouger dame en d8 vers h4
@@ -81,10 +86,8 @@ Note: Pour les fichiers de parties sauvegarder, nous étions seulement capable d
     bouger pion en g3 vers g4
     charger fichier: regle_16.bin
 
-
-Pour les fonctionnalités avec une *, vous DEVEZ indiquer ici quel fichier de
-sauvegarde ouvrir et quels déplacements effectuer pour que le correcteur puisse
-évaluer votre fonctionnalité.
+19. Règles avancées : «promotion» du pion :
+    bouger pion de c7 vers c8
 
 
 Total: /30
