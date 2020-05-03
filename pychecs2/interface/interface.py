@@ -251,7 +251,7 @@ class Fenetre(Tk):
 
 
             except EOFError:
-                self.messages['text'] = "Il n'y a pas de partie sauvegarder !"
+                self.messages['text'] = "Il n'y a pas de dernier mouvement !"
 
 
     def nouvelle_partie(self):
@@ -347,6 +347,7 @@ class Fenetre(Tk):
         except ProvoqueEchecJoueursActif as e:
             self.messages['text'] = e
             self.charger_dernier_mouvement()
+            self.canvas_echiquier.position_selectionnee = None
 
 
         finally:
