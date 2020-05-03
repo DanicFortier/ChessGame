@@ -325,9 +325,8 @@ class Echiquier:
 
     def echec_et_mat_sur_le_roi_de_couleur(self,couleur):
 
-
         position_du_roi = self.position_roi_de_couleur(couleur)
-        deplacements_valides = self.ObtenirDeplacementValide(position_du_roi)
+        deplacements_valides = self.obtenir_deplacement_valide(position_du_roi)
 
         for deplacement_valides in deplacements_valides:
 
@@ -344,8 +343,7 @@ class Echiquier:
         # c'est que tous les positions sont couvertes par une pièce ennemi
         return True
 
-
-    def ObtenirDeplacementValide(self, position_source):
+    def obtenir_deplacement_valide(self, position_source):
 
         if self.recuperer_piece_a_position(position_source) is None:
             raise AucunePieceAPosition("Impossible de vérifier les déplacements, il n'y a pas de pièce.")
@@ -358,6 +356,16 @@ class Echiquier:
                     liste_position_deplacement_valide_roi_de_couleur.append(position_test)
 
         return liste_position_deplacement_valide_roi_de_couleur
+
+    def promotion_pion(self, position_cible):
+        piece = self.recuperer_piece_a_position(position_cible)
+        if isinstance(piece, Pion):
+            if piece.est_blanc():
+                if position_cible in ['a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8']:
+                    self.dictionnaire_pieces[position_cible] = Dame('blanc')
+            if piece.est_noir():
+                if position_cible in ['a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1']:
+                    self.dictionnaire_pieces[position_cible] = Dame('noir')
 
 
     def initialiser_echiquier_depart(self):

@@ -311,6 +311,8 @@ class Fenetre(Tk):
                     case = self.canvas_echiquier.correspondance_case_rectangle[position]
                     self.canvas_echiquier.itemconfig(case, fill='yellow')
 
+
+
                 else:
                     # Deuxième clic: position_cible
                     self.partie.deplacer(self.canvas_echiquier.position_selectionnee, position)
@@ -322,8 +324,8 @@ class Fenetre(Tk):
                         self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec!"
 
                         #TODO: Échec et mat ici.
-                        if self.partie.echiquier.echec_et_mat_sur_le_roi_de_couleur(self.partie.joueur_actif):
-                            self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec et mat!"
+                        #if self.partie.echiquier.echec_et_mat_sur_le_roi_de_couleur(self.partie.joueur_actif):
+                        #    self.messages['text'] = "Le roi " + self.partie.joueur_actif + " est en échec et mat!"
 
 
             #TODO: Empêcher les joueurs de continuer à jouer lorsque la partie est fini
@@ -332,6 +334,10 @@ class Fenetre(Tk):
                 self.messages['text'] = 'Partie terminée! Le joueur ' + self.partie.determiner_gagnant() + (' a gagné!')
             else:
                 self.mise_a_jour_message_joueur_actif()
+
+
+
+
 
 
         except (ErreurDeplacement, AucunePieceAPosition, MauvaiseCouleurPiece) as e:

@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     # Affichage de l'échiquier dans cette partie.
     print(p.echiquier)
-    print(p.echiquier.ObtenirDeplacementValide('g1'))
+    #print(p.echiquier.ObtenirDeplacementValide('g1'))
 
 
 

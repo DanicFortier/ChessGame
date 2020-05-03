@@ -85,9 +85,12 @@ class Partie:
 
         self.echiquier.deplacer(position_source, position_cible)
 
-        # TODO:
+        #TODO: mettre la promotion du pion ici
+
+        self.echiquier.promotion_pion(position_cible)
+
         if self.echiquier.echec_sur_le_roi_de_couleur(self.joueur_actif):
-            raise ProvoqueEchecJoueursActif("Ce mouvement provoquerait un échec ou n'en bloque pas un, mouvement invalide")
+            raise ProvoqueEchecJoueursActif("Ce mouvement provoquerait cause un échec, mouvement invalide")
 
         self.joueur_suivant()
 
